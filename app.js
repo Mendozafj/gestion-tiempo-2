@@ -9,6 +9,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+require('dotenv').config();
+const db = require('./config/db');
 app.use(methodOverride('_method'));
 
 // view engine setup
