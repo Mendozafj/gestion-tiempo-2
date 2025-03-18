@@ -77,4 +77,56 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// Relacionar un proyecto con un usuario
+router.post('/:userId/projects/:projectId', async (req, res) => {
+  try {
+    const result = await usersController.addProjectToUser(req.params.userId, req.params.projectId);
+    if (result.error) {
+      return res.status(400).send(result.error);
+    }
+    res.status(201).send("Proyecto relacionado con el usuario");
+  } catch (err) {
+    res.status(500).send(`Error al relacionar proyecto con usuario: ${err}`);
+  }
+});
+
+// Relacionar un hábito con un usuario
+router.post('/:userId/habits/:habitId', async (req, res) => {
+  try {
+    const result = await usersController.addHabitToUser(req.params.userId, req.params.habitId);
+    if (result.error) {
+      return res.status(400).send(result.error);
+    }
+    res.status(201).send("Hábito relacionado con el usuario");
+  } catch (err) {
+    res.status(500).send(`Error al relacionar hábito con usuario: ${err}`);
+  }
+});
+
+// Eliminar la relación entre un proyecto y un usuario
+router.delete('/projects/:relationId', async (req, res) => {
+  try {
+    const result = await usersController.removeProjectFromUser(req.params.relationId);
+    if (result.error) {
+      return res.status(400).send(result.error);
+    }
+    res.status(200).send("Relación entre proyecto y usuario eliminada");
+  } catch (err) {
+    res.status(500).send(`Error al eliminar relación entre proyecto y usuario: ${err}`);
+  }
+});
+
+// Eliminar la relación entre un hábito y un usuario
+router.delete('/habits/:relationId', async (req, res) => {
+  try {
+    const result = await usersController.removeHabitFromUser(req.params.relationId);
+    if (result.error) {
+      return res.status(400).send(result.error);
+    }
+    res.status(200).send("Relación entre hábito y usuario eliminada");
+  } catch (err) {
+    res.status(500).send(`Error al eliminar relación entre hábito y usuario: ${err}`);
+  }
+});
+
 module.exports = router;

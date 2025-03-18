@@ -22,7 +22,7 @@ class HabitsController {
       const habits = await habitsModel.show();
       return habits;
     } catch (err) {
-      throw new Error(`Error al listar hábitos: ${err}`);
+      return { error: `Error al listar hábitos: ${err.message}` };
     }
   }
 
@@ -30,11 +30,11 @@ class HabitsController {
     try {
       const habit = await habitsModel.showByID(id);
       if (!habit) {
-        return false;
+        return { error: `No se encontró el hábito con id: ${id}` };
       }
       return habit;
     } catch (err) {
-      throw new Error(`Error al buscar hábito: ${err}`);
+      return { error: `Error al buscar hábito: ${err.message}` };
     }
   }
 
@@ -56,7 +56,7 @@ class HabitsController {
 
       return { success: true };
     } catch (err) {
-      throw new Error(`Error al editar el hábito: ${err}`);
+      return { error: `Error al editar el hábito: ${err.message}` };
     }
   }
 
@@ -70,7 +70,38 @@ class HabitsController {
       await habitsModel.delete(id);
       return { success: true };
     } catch (err) {
-      throw new Error(`Error al eliminar hábito: ${err}`);
+      return { error: `Error al eliminar hábito: ${err.message}` };
+    }
+  }
+
+  async addActivity(id, activityId) {
+    try {
+      const existingRelation = await habitsModel.getActivityRelation(id, activityId);
+      if (existingRelation) {
+        return { error: 'Esta actividad ya está asociada al hábito' };
+      }
+      const relationId = await habitsModel.addActivity(id, activityId);
+      return { id: relationId };
+    } catch (error) {
+      return { error: `Error al agregar actividad al hábito: ${error.message}` };
+    }
+  }
+
+  async removeActivity(relationId) {
+    try {
+      await habitsModel.removeActivity(relationId);
+      return { message: 'Actividad eliminada del hábito con éxito' };
+    } catch (error) {
+      return { error: `Error al eliminar actividad del hábito: ${error.message}` };
+    }
+  }
+
+  async getActivities(id) {
+    try {
+      const activities = await habitsModel.getActivities(id);
+      return activities;
+    } catch (error) {
+      return { error: `Error al obtener actividades del hábito: ${error.message}` };
     }
   }
 }

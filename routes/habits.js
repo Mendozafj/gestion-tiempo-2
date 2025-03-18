@@ -64,4 +64,40 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+/* POST agregar actividad a hábito */
+router.post('/:habitId/activities/:activityId', async (req, res) => {
+  try {
+    const result = await habitsController.addActivity(req.params.habitId, req.params.activityId);
+    if (result.error) {
+      return res.status(400).send(result.error);
+    }
+    res.status(201).send("Actividad agregada");
+  } catch (err) {
+    res.status(500).send(`Error al agregar actividad`);
+  }
+});
+
+/* DELETE eliminar actividad de hábito */
+router.delete('/activities/:relationId', async (req, res) => {
+  try {
+    const result = await habitsController.removeActivity(req.params.relationId);
+    if (result.error) {
+      return res.status(400).send(result.error);
+    }
+    res.status(200).send("Actividad eliminada del hábito");
+  } catch (err) {
+    res.status(500).send(`Error al eliminar actividad del hábito.`);
+  }
+});
+
+/* GET mostrar actividades de hábito */
+router.get('/:habitId/activities', async (req, res) => {
+  try {
+    const activities = await habitsController.getActivities(req.params.habitId);
+    res.status(200).send(activities);
+  } catch (err) {
+    res.status(500).send(`Error al mostrar actividades: ${err}`);
+  }
+});
+
 module.exports = router;

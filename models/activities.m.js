@@ -62,6 +62,62 @@ class ActivitiesModel {
       throw error;
     }
   }
+
+  // Método para agregar una categoría a una actividad
+  async addCategory(activityId, categoryId) {
+    if (!(await this.activityExists(activityId))) {
+      throw new Error('La actividad no existe');
+    }
+    if (!(await this.categoryExists(categoryId))) {
+      throw new Error('La categoría no existe');
+    }
+    const query = 'INSERT INTO category_activities (activity_id, category_id) VALUES (?, ?)';
+    await pool.query(query, [activityId, categoryId]);
+  }
+
+  // Método para eliminar una categoría de una actividad
+  async removeCategory(relationId) {
+    const checkQuery = 'SELECT id FROM category_activities WHERE id = ?';
+    const [rows] = await pool.query(checkQuery, [relationId]);
+    if (rows.length === 0) {
+      throw new Error('La relación no existe');
+    }
+    const deleteQuery = 'DELETE FROM category_activities WHERE id = ?';
+    await pool.query(deleteQuery, [relationId]);
+  }
+
+  // Método para obtener las categorías de una actividad
+  async getCategories(activityId) {
+    const query = 'SELECT c.* FROM categories c JOIN category_activities ca ON c.id = ca.category_id WHERE ca.activity_id = ?';
+
+    try {
+      const [rows] = await pool.query(query, [activityId]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Método para verificar si una actividad existe
+  async activityExists(activityId) {
+    const query = 'SELECT id FROM activities WHERE id = ?';
+    const [rows] = await pool.query(query, [activityId]);
+    return rows.length > 0;
+  }
+
+  // Método para verificar si una categoría existe
+  async categoryExists(categoryId) {
+    const query = 'SELECT id FROM categories WHERE id = ?';
+    const [rows] = await pool.query(query, [categoryId]);
+    return rows.length > 0;
+  }
+
+  // Método para verificar si una categoría ya está asociada a una actividad
+  async getCategoryRelation(activityId, categoryId) {
+    const query = 'SELECT id FROM category_activities WHERE activity_id = ? AND category_id = ?';
+    const [rows] = await pool.query(query, [activityId, categoryId]);
+    return rows.length > 0 ? rows[0] : null;
+  }
 }
 
 module.exports = new ActivitiesModel();

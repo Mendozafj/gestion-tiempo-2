@@ -73,6 +73,37 @@ class ActivitiesController {
       throw new Error(`Error al eliminar actividad: ${err}`);
     }
   }
+
+  async addCategory(id, categoryId) {
+    try {
+      const existingRelation = await activitiesModel.getCategoryRelation(id, categoryId);
+      if (existingRelation) {
+        return { error: 'Esta categoría ya está asociada a la actividad' };
+      }
+      const relationId = await activitiesModel.addCategory(id, categoryId);
+      return { id: relationId };
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
+  }
+
+  async removeCategory(id, relationId) {
+    try {
+      await activitiesModel.removeCategory(id, relationId);
+      return { message: 'Categoría eliminada de la actividad con éxito' };
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
+  }
+
+  async getCategories(id) {
+    try {
+      const categories = await activitiesModel.getCategories(id);
+      return categories;
+    } catch (err) {
+      throw new Error(`Error al obtener categorías de la actividad: ${err}`);
+    }
+  }
 }
 
 module.exports = new ActivitiesController();

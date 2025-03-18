@@ -64,4 +64,40 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// Rutas para manejar la relación entre actividades y categorías
+router.post('/:activityId/categories/:categoryId', async (req, res) => {
+  try {
+    const result = await activitiesController.addCategory(req.params.activityId, req.params.categoryId);
+    if (result.error) {
+      return res.status(400).send(result.error);
+    }
+    res.status(200).send("Categoría agregada a la actividad");
+  } catch (err) {
+    res.status(500).send(`Error al agregar categoría a la actividad: ${err}`);
+  }
+});
+
+// Rutas para eliminar la relación entre actividades y categorías
+router.delete('/categories/:relationId', async (req, res) => {
+  try {
+    const result = await activitiesController.removeCategory(req.params.relationId);
+    if (result.error) {
+      return res.status(400).send(result.error);
+    }
+    res.status(200).send("Categoría eliminada de la actividad");
+  } catch (err) {
+    res.status(500).send(`No se eliminó la categoría de la actividad`);
+  }
+});
+
+// Rutas para obtener las categorías de una actividad
+router.get('/:activityId/categories', async (req, res) => {
+  try {
+    const categories = await activitiesController.getCategories(req.params.activityId);
+    res.status(200).send(categories);
+  } catch (err) {
+    res.status(500).send(`Error al obtener categorías de la actividad: ${err}`);
+  }
+});
+
 module.exports = router;
