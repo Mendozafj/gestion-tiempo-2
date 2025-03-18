@@ -156,6 +156,25 @@ class UsersController {
     }
   }
 
+  // Obtener los proyectos de un usuario
+  async getUserProjects(userId) {
+    try {
+      const projects = await usersModel.getUserProjects(userId);
+      return projects;
+    } catch (error) {
+      throw new Error(`Error al obtener proyectos del usuario: ${error.message}`);
+    }
+  }
+
+  // Obtener los hábitos de un usuario
+  async getUserHabits(userId) {
+    try {
+      const habits = await usersModel.getUserHabits(userId);
+      return habits;
+    } catch (error) {
+      throw new Error(`Error al obtener hábitos del usuario: ${error.message}`);
+    }
+  }
   // Eliminar la relación entre un proyecto y un usuario
   async removeProjectFromUser(relationId) {
     try {

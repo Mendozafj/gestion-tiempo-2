@@ -100,4 +100,17 @@ router.get('/:activityId/categories', async (req, res) => {
   }
 });
 
+// Mostrar las actividades de una categoría determinada de un usuario dado
+router.get('/users/:userId/categories/:categoryId', async (req, res) => {
+  try {
+    const activities = await activitiesController.getActivitiesByUserAndCategory(
+      req.params.userId,
+      req.params.categoryId
+    );
+    res.status(200).send(activities);
+  } catch (err) {
+    res.status(500).send(`Error al obtener actividades: ${err}`);
+  }
+});
+
 module.exports = router;

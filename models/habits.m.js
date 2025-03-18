@@ -130,6 +130,23 @@ class HabitsModel {
       throw error;
     }
   }
+
+  // Obtener los hábitos que no tienen actividades realizadas
+  async getHabitsWithoutActivities() {
+    const query = `
+      SELECT h.*
+      FROM habits h
+      LEFT JOIN habit_activities ha ON h.id = ha.habit_id
+      LEFT JOIN activity_logs al ON ha.activity_id = al.activity_id
+      WHERE al.id IS NULL
+    `;
+    try {
+      const [rows] = await pool.query(query);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new HabitsModel();

@@ -104,6 +104,29 @@ class ActivitiesController {
       throw new Error(`Error al obtener categorías de la actividad: ${err}`);
     }
   }
+
+  // Mostrar las actividades de una categoría determinada de un usuario dado
+  async getActivitiesByUserAndCategory(userId, categoryId) {
+    try {
+      // Verificar si el usuario existe
+      const userExists = await activitiesModel.userExists(userId);
+      if (!userExists) {
+        return { error: `El usuario con id ${userId} no existe` };
+      }
+
+      // Verificar si la categoría existe
+      const categoryExists = await activitiesModel.categoryExists(categoryId);
+      if (!categoryExists) {
+        return { error: `La categoría con id ${categoryId} no existe` };
+      }
+
+      // Obtener las actividades
+      const activities = await activitiesModel.getActivitiesByUserAndCategory(userId, categoryId);
+      return activities;
+    } catch (error) {
+      throw new Error(`Error al obtener actividades: ${error.message}`);
+    }
+  }
 }
 
 module.exports = new ActivitiesController();

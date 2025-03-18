@@ -103,6 +103,26 @@ router.post('/:userId/habits/:habitId', async (req, res) => {
   }
 });
 
+// Obtener los proyectos de un usuario
+router.get('/:userId/projects', async (req, res) => {
+  try {
+    const projects = await usersController.getUserProjects(req.params.userId);
+    res.status(200).send(projects);
+  } catch (err) {
+    res.status(500).send(`Error al obtener proyectos del usuario: ${err}`);
+  }
+});
+
+// Obtener los hábitos de un usuario
+router.get('/:userId/habits', async (req, res) => {
+  try {
+    const habits = await usersController.getUserHabits(req.params.userId);
+    res.status(200).send(habits);
+  } catch (err) {
+    res.status(500).send(`Error al obtener hábitos del usuario: ${err}`);
+  }
+});
+
 // Eliminar la relación entre un proyecto y un usuario
 router.delete('/projects/:relationId', async (req, res) => {
   try {

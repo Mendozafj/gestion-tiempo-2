@@ -86,6 +86,26 @@ class CategoriesModel {
       throw error;
     }
   }
+
+  // Obtener el tiempo usado en cada categoría
+  async getTimeUsedByCategory() {
+    const query = `
+      SELECT 
+        c.name AS category_name,
+        SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(al.end_time, al.start_time)))) AS total_time
+      FROM activity_logs al
+      JOIN activities a ON al.activity_id = a.id
+      JOIN category_activities ca ON a.id = ca.activity_id
+      JOIN categories c ON ca.category_id = c.id
+      GROUP BY c.name
+    `;
+    try {
+      const [rows] = await pool.query(query);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new CategoriesModel();

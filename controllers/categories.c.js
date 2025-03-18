@@ -87,6 +87,17 @@ class CategoriesController {
       throw new Error(`Error al eliminar categoría: ${err}`);
     }
   }
+
+  // Mostrar información sobre el tiempo usado en cada categoría
+  async getTimeUsedByCategory() {
+    try {
+      // Obtener el tiempo usado por categoría
+      const timeUsedByCategory = await categoriesModel.getTimeUsedByCategory();
+      return timeUsedByCategory;
+    } catch (error) {
+      throw new Error(`Error al obtener el tiempo usado por categoría: ${error.message}`);
+    }
+  }
 }
 
 module.exports = new CategoriesController();

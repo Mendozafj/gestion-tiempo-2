@@ -25,6 +25,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Mostrar los hábitos que no tienen actividades realizadas
+router.get('/habits-without-activities', async (req, res) => {
+  try {
+    const habits = await habitsController.getHabitsWithoutActivities();
+    res.status(200).send(habits);
+  } catch (err) {
+    res.status(500).send(`Error al obtener hábitos sin actividades realizadas: ${err}`);
+  }
+});
+
 /* GET mostrar hábito por id */
 router.get('/:id', async (req, res) => {
   try {

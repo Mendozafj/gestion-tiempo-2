@@ -124,6 +124,17 @@ class ProjectsController {
       return { error: `Error al eliminar relación entre proyecto y actividad realizada: ${error.message}` };
     }
   }
+
+  // Mostrar información sobre el tiempo usado en cada proyecto
+  async getTimeUsedByProject() {
+    try {
+      // Obtener el tiempo usado por proyecto
+      const timeUsedByProject = await projectsModel.getTimeUsedByProject();
+      return timeUsedByProject;
+    } catch (error) {
+      throw new Error(`Error al obtener el tiempo usado por proyecto: ${error.message}`);
+    }
+  }
 }
 
 module.exports = new ProjectsController();

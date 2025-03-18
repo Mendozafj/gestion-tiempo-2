@@ -176,6 +176,25 @@ class ProjectsModel {
       throw error;
     }
   }
+
+  // Obtener el tiempo usado en cada proyecto
+  async getTimeUsedByProject() {
+    const query = `
+      SELECT 
+        p.name AS project_name,
+        SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(al.end_time, al.start_time)))) AS total_time
+      FROM activity_logs al
+      JOIN project_activity_logs pal ON al.id = pal.activity_log_id
+      JOIN projects p ON pal.project_id = p.id
+      GROUP BY p.name
+    `;
+    try {
+      const [rows] = await pool.query(query);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new ProjectsModel();

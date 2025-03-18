@@ -25,6 +25,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+/* Mostrar información sobre el tiempo usado en cada proyecto */
+router.get('/time-used', async (req, res) => {
+  try {
+    const timeUsedByProject = await projectsController.getTimeUsedByProject();
+    res.status(200).send(timeUsedByProject);
+  } catch (err) {
+    res.status(500).send(`Error al obtener el tiempo usado por proyecto: ${err}`);
+  }
+});
+
 /* GET mostrar proyecto por id */
 router.get('/:id', async (req, res) => {
   try {
@@ -71,13 +81,13 @@ router.post('/:projectId/activity-logs/:activityLogId', async (req, res) => {
     if (result.error) {
       return res.status(400).send(result.error); // Devuelve el mensaje de error
     }
-    res.status(201).send(`Relación creada con ID`);
+    res.status(201).send(`Actividad agregada al proyecto`);
   } catch (err) {
     res.status(500).send(`Error al relacionar actividad realizada con proyecto: ${err}`);
   }
 });
 
-// Buscar actividades realizadas por proyecto
+// Obtener las actividades realizadas de un proyecto
 router.get('/:projectId/activity-logs', async (req, res) => {
   try {
     const activityLogs = await projectsController.getProjectActivityLogs(req.params.projectId);

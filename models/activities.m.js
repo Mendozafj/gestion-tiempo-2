@@ -104,12 +104,15 @@ class ActivitiesModel {
     const [rows] = await pool.query(query, [activityId]);
     return rows.length > 0;
   }
-
-  // Método para verificar si una categoría existe
+  // Verificar si una categoría existe
   async categoryExists(categoryId) {
     const query = 'SELECT id FROM categories WHERE id = ?';
-    const [rows] = await pool.query(query, [categoryId]);
-    return rows.length > 0;
+    try {
+      const [rows] = await pool.query(query, [categoryId]);
+      return rows.length > 0;
+    } catch (error) {
+      throw error;
+    }
   }
 
   // Método para verificar si una categoría ya está asociada a una actividad
@@ -117,6 +120,35 @@ class ActivitiesModel {
     const query = 'SELECT id FROM category_activities WHERE activity_id = ? AND category_id = ?';
     const [rows] = await pool.query(query, [activityId, categoryId]);
     return rows.length > 0 ? rows[0] : null;
+  }
+
+  // Verificar si un usuario existe
+  async userExists(userId) {
+    const query = 'SELECT id FROM users WHERE id = ?';
+    try {
+      const [rows] = await pool.query(query, [userId]);
+      return rows.length > 0;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
+  // Obtener las actividades de una categoría determinada de un usuario dado
+  async getActivitiesByUserAndCategory(userId, categoryId) {
+    const query = `
+        SELECT a.* 
+        FROM activities a
+        JOIN category_activities ca ON a.id = ca.activity_id
+        JOIN activity_logs al ON a.id = al.activity_id
+        WHERE ca.category_id = ? AND al.user_id = ?
+      `;
+    try {
+      const [rows] = await pool.query(query, [categoryId, userId]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
   }
 }
 

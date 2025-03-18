@@ -104,6 +104,17 @@ class HabitsController {
       return { error: `Error al obtener actividades del hábito: ${error.message}` };
     }
   }
+
+  // Mostrar los hábitos que no tienen actividades realizadas
+  async getHabitsWithoutActivities() {
+    try {
+      // Obtener los hábitos sin actividades realizadas
+      const habits = await habitsModel.getHabitsWithoutActivities();
+      return habits;
+    } catch (error) {
+      throw new Error(`Error al obtener hábitos sin actividades realizadas: ${error.message}`);
+    }
+  }
 }
 
 module.exports = new HabitsController();

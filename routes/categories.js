@@ -25,6 +25,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Mostrar información sobre el tiempo usado en cada categoría
+router.get('/time-used', async (req, res) => {
+  try {
+    const timeUsedByCategory = await categoriesController.getTimeUsedByCategory();
+    res.status(200).send(timeUsedByCategory);
+  } catch (err) {
+    res.status(500).send(`Error al obtener el tiempo usado por categoría: ${err}`);
+  }
+});
+
 /* GET mostrar categoría por id */
 router.get('/:id', async (req, res) => {
   try {

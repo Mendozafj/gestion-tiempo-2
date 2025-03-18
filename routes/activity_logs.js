@@ -25,6 +25,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Mostrar actividades abiertas (sin fecha de finalización)
+router.get('/open-activities', async (req, res) => {
+  try {
+    const openActivities = await activityLogsController.getOpenActivities();
+    res.status(200).send(openActivities);
+  } catch (err) {
+    res.status(500).send(`Error al obtener actividades abiertas: ${err}`);
+  }
+});
+
 /* GET mostrar un registro de actividad por su ID */
 router.get('/:id', async (req, res) => {
   try {
@@ -81,6 +91,56 @@ router.delete('/:id', async (req, res) => {
     res.status(200).send("Registro de actividad eliminado")
   } catch (err) {
     res.status(500).send(`Error al eliminar registro de actividad: ${err}`);
+  }
+});
+
+// Mostrar las últimas 5 actividades realizadas por un usuario
+router.get('/users/:userId/last-activities', async (req, res) => {
+  try {
+    const activities = await activityLogsController.getLastActivitiesByUser(req.params.userId);
+    res.status(200).send(activities);
+  } catch (err) {
+    res.status(500).send(`Error al obtener las últimas actividades: ${err}`);
+  }
+});
+
+// Buscar actividades realizadas por proyecto
+router.get('/projects/:projectId/activities', async (req, res) => {
+  try {
+    const activities = await activityLogsController.getActivitiesByProject(req.params.projectId);
+    res.status(200).send(activities);
+  } catch (err) {
+    res.status(500).send(`Error al obtener actividades por proyecto: ${err}`);
+  }
+});
+
+// Mostrar actividades realizadas de un hábito en específico por rango de fecha
+router.get('/habits/:habitId/activities', async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query; // Obtener las fechas del query string
+    const activities = await activityLogsController.getActivitiesByHabitAndDateRange(
+      req.params.habitId,
+      startDate,
+      endDate
+    );
+    res.status(200).send(activities);
+  } catch (err) {
+    res.status(500).send(`Error al obtener actividades por hábito y rango de fecha: ${err}`);
+  }
+});
+
+// Buscar actividades realizadas por nombre de la actividad
+router.get('/activities/search', async (req, res) => {
+  try {
+    const { name } = req.query; // Obtener el nombre de la actividad del query string
+    if (!name) {
+      return res.status(400).send("Debes proporcionar un nombre de actividad");
+    }
+
+    const activities = await activityLogsController.getActivitiesByName(name);
+    res.status(200).send(activities);
+  } catch (err) {
+    res.status(500).send(`Error al buscar actividades por nombre: ${err}`);
   }
 });
 

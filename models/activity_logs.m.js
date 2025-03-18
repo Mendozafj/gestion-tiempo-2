@@ -138,6 +138,125 @@ class ActivityLogsModel {
       throw error;
     }
   }
+
+  // Obtener las últimas 5 actividades realizadas por un usuario
+  async getLastActivitiesByUser(userId) {
+    const query = `
+      SELECT a.name AS activity_name, c.name AS category_name, al.start_time, al.end_time
+      FROM activity_logs al
+      JOIN activities a ON al.activity_id = a.id
+      JOIN category_activities ca ON a.id = ca.activity_id
+      JOIN categories c ON ca.category_id = c.id
+      WHERE al.user_id = ?
+      ORDER BY al.start_time DESC
+      LIMIT 5
+    `;
+    try {
+      const [rows] = await pool.query(query, [userId]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Verificar si un proyecto existe
+  async projectExists(projectId) {
+    const query = 'SELECT id FROM projects WHERE id = ?';
+    try {
+      const [rows] = await pool.query(query, [projectId]);
+      return rows.length > 0;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Obtener actividades realizadas por proyecto
+  async getActivitiesByProject(projectId) {
+    const query = `
+      SELECT a.name AS activity_name, c.name AS category_name, al.start_time, al.end_time
+      FROM activity_logs al
+      JOIN activities a ON al.activity_id = a.id
+      JOIN category_activities ca ON a.id = ca.activity_id
+      JOIN categories c ON ca.category_id = c.id
+      JOIN project_activity_logs pal ON al.id = pal.activity_log_id
+      WHERE pal.project_id = ?
+    `;
+    try {
+      const [rows] = await pool.query(query, [projectId]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Verificar si un hábito existe
+  async habitExists(habitId) {
+    const query = 'SELECT id FROM habits WHERE id = ?';
+    try {
+      const [rows] = await pool.query(query, [habitId]);
+      return rows.length > 0;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Obtener actividades realizadas de un hábito en específico por rango de fecha
+  async getActivitiesByHabitAndDateRange(habitId, startDate, endDate) {
+    const query = `
+      SELECT a.name AS activity_name, c.name AS category_name, al.start_time, al.end_time
+      FROM activity_logs al
+      JOIN activities a ON al.activity_id = a.id
+      JOIN category_activities ca ON a.id = ca.activity_id
+      JOIN categories c ON ca.category_id = c.id
+      JOIN habit_activities ha ON a.id = ha.activity_id
+      WHERE ha.habit_id = ? AND al.start_time >= ? AND al.end_time <= ?
+    `;
+    try {
+      const [rows] = await pool.query(query, [habitId, startDate, endDate]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Obtener actividades realizadas por nombre de la actividad
+  async getActivitiesByName(name) {
+    const query = `
+      SELECT a.name AS activity_name, c.name AS category_name, al.start_time, al.end_time
+      FROM activity_logs al
+      JOIN activities a ON al.activity_id = a.id
+      JOIN category_activities ca ON a.id = ca.activity_id
+      JOIN categories c ON ca.category_id = c.id
+      WHERE a.name LIKE ?
+    `;
+    try {
+      const [rows] = await pool.query(query, [`%${name}%`]); // Usar LIKE para búsqueda parcial
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Obtener actividades abiertas (sin fecha de finalización)
+  async getOpenActivities() {
+    const query = `
+    SELECT 
+      a.name AS activity_name,
+      c.name AS category_name,
+      al.start_time
+    FROM activity_logs al
+    JOIN activities a ON al.activity_id = a.id
+    JOIN category_activities ca ON a.id = ca.activity_id
+    JOIN categories c ON ca.category_id = c.id
+    WHERE al.end_time IS NULL
+  `;
+    try {
+      const [rows] = await pool.query(query);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new ActivityLogsModel();
