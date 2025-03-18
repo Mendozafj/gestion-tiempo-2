@@ -11,6 +11,7 @@ const activitiesRouter = require('./routes/activities');
 const categoriesRouter = require('./routes/categories');
 const habitsRouter = require('./routes/habits');
 const projectsRouter = require('./routes/projects');
+const activityLogsRouter = require('./routes/activity_logs');
 
 var app = express();
 require('dotenv').config();
@@ -33,6 +34,7 @@ app.use('/activities', activitiesRouter);
 app.use('/categories', categoriesRouter);
 app.use('/habits', habitsRouter);
 app.use('/projects', projectsRouter);
+app.use('/activity-logs', activityLogsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
