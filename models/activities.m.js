@@ -104,6 +104,7 @@ class ActivitiesModel {
     const [rows] = await pool.query(query, [activityId]);
     return rows.length > 0;
   }
+
   // Verificar si una categoría existe
   async categoryExists(categoryId) {
     const query = 'SELECT id FROM categories WHERE id = ?';

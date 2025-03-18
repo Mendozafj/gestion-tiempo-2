@@ -61,14 +61,17 @@ class ProjectsController {
     }
   }
 
+  // Eliminar proyecto y sus actividades realizadas
   async delete(id) {
     try {
+      // Verificar si el proyecto existe
       const project = await projectsModel.showByID(id);
       if (!project) {
         return { error: `No se encontró el proyecto con id: ${id}` };
       }
 
-      await projectsModel.delete(id);
+      // Eliminar el proyecto y sus actividades realizadas
+      await projectsModel.deleteProjectAndActivities(id);
       return { success: true };
     } catch (err) {
       throw new Error(`Error al eliminar proyecto: ${err}`);

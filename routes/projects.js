@@ -61,16 +61,16 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-/* DELETE eliminar proyecto */
+// Eliminar proyecto y sus actividades realizadas
 router.delete('/:id', async (req, res) => {
   try {
     const result = await projectsController.delete(req.params.id);
     if (result.error) {
       return res.status(400).send(result.error);
     }
-    res.status(200).send("Proyecto eliminado")
+    res.status(200).send("Proyecto y sus actividades realizadas eliminados");
   } catch (err) {
-    res.status(500).send(`Error al eliminar proyecto: ${err}`);
+    res.status(500).send(`Error al eliminar proyecto y sus actividades realizadas: ${err}`);
   }
 });
 

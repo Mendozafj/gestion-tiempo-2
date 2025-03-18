@@ -51,23 +51,38 @@ class ProjectsModel {
     }
   }
 
-  // Método para eliminar un proyecto por su ID
-  async delete(id) {
-    const query = 'DELETE FROM projects WHERE id = ?';
-
-    try {
-      const [result] = await pool.query(query, [id]);
-      return result.affectedRows;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   // Método para verificar si un proyecto existe
   async projectExists(projectId) {
     const query = 'SELECT id FROM projects WHERE id = ?';
     const [rows] = await pool.query(query, [projectId]);
     return rows.length > 0;
+  }
+
+  // Método para eliminar un proyecto y sus actividades realizadas
+  async deleteProjectAndActivities(projectId) {
+    const connection = await pool.getConnection();
+    try {
+      await connection.beginTransaction(); // Iniciar transacción
+
+      // 1. Eliminar las actividades realizadas asociadas al proyecto
+      const deleteActivitiesQuery = `
+      DELETE al FROM activity_logs al
+      JOIN project_activity_logs pal ON al.id = pal.activity_log_id
+      WHERE pal.project_id = ?
+    `;
+      await connection.query(deleteActivitiesQuery, [projectId]);
+
+      // 2. Eliminar el proyecto (esto eliminará automáticamente las relaciones en project_activity_logs debido a ON DELETE CASCADE)
+      const deleteProjectQuery = 'DELETE FROM projects WHERE id = ?';
+      await connection.query(deleteProjectQuery, [projectId]);
+
+      await connection.commit(); // Confirmar transacción
+    } catch (error) {
+      await connection.rollback(); // Revertir transacción en caso de error
+      throw error;
+    } finally {
+      connection.release(); // Liberar la conexión
+    }
   }
 
   // Método para verificar si una actividad realizada existe
