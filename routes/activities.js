@@ -7,11 +7,23 @@ router.post('/', async (req, res) => {
   try {
     const result = await activitiesController.register(req.body);
     if (result.error) {
-      return res.status(400).send(result.error);
+      return res.status(400).render('message', {
+        message: 'Error',
+        details: result.error,
+        redirectUrl: '/activities'
+      });
     }
-    return res.status(201).send("Actividad creada");
+    res.status(201).render('message', {
+      message: 'Actividad creada',
+      details: `La actividad "${req.body.name}" ha sido creada exitosamente.`,
+      redirectUrl: '/activities'
+    });
   } catch (error) {
-    res.status(500).send("Error al registrar la actividad");
+    res.status(500).render('message', {
+      message: 'Error',
+      details: `No se pudo crear la actividad: ${error.message}`,
+      redirectUrl: '/activities'
+    });
   }
 });
 
@@ -19,9 +31,27 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const activities = await activitiesController.show();
-    res.status(200).render('activities', { activities });  // Renderiza la vista 'activities.ejs'
+    res.status(200).render('activities/activities', { activities });  // Renderiza la vista 'activities.ejs'
   } catch (err) {
     res.status(500).send(`Error al listar actividades: ${err}`);
+  }
+});
+
+// Mostrar formulario para crear una actividad
+router.get('/new', (req, res) => {
+  res.render('activities/new');
+});
+
+// Mostrar formulario para editar una actividad
+router.get('/:id/edit', async (req, res) => {
+  try {
+    const activity = await activitiesController.showByID(req.params.id);
+    if (!activity) {
+      return res.status(404).send("Actividad no encontrada");
+    }
+    res.render('activities/edit', { activity });
+  } catch (err) {
+    res.status(500).send(`Error al obtener la actividad: ${err}`);
   }
 });
 
@@ -43,11 +73,23 @@ router.put('/:id', async (req, res) => {
   try {
     const result = await activitiesController.update(req.params.id, req.body);
     if (result.error) {
-      return res.status(400).send(result.error);
+      return res.status(400).render('message', {
+        message: 'Error',
+        details: result.error,
+        redirectUrl: '/activities'
+      });
     }
-    res.status(200).send("Actividad editada");
-  } catch (err) {
-    res.status(500).send(`Error al editar la actividad: ${err}`);
+    res.status(200).render('message', {
+      message: 'Actividad editada',
+      details: `La actividad "${req.body.name}" ha sido actualizada exitosamente.`,
+      redirectUrl: '/activities'
+    });
+  } catch (error) {
+    res.status(500).render('message', {
+      message: 'Error',
+      details: `No se pudo editar la actividad: ${error.message}`,
+      redirectUrl: '/activities'
+    });
   }
 });
 
@@ -56,11 +98,23 @@ router.delete('/:id', async (req, res) => {
   try {
     const result = await activitiesController.delete(req.params.id);
     if (result.error) {
-      return res.status(400).send(result.error);
+      return res.status(400).render('message', {
+        message: 'Error',
+        details: result.error,
+        redirectUrl: '/activities'
+      });
     }
-    res.status(200).send("Actividad eliminada")
-  } catch (err) {
-    res.status(500).send(`Error al eliminar actividad: ${err}`);
+    res.status(200).render('message', {
+      message: 'Actividad eliminada',
+      details: `La actividad ha sido eliminada exitosamente.`,
+      redirectUrl: '/activities'
+    });
+  } catch (error) {
+    res.status(500).render('message', {
+      message: 'Error',
+      details: `No se pudo eliminar la actividad: ${error.message}`,
+      redirectUrl: '/activities'
+    });
   }
 });
 
