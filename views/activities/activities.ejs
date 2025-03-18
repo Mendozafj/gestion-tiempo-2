@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lista de Actividades</title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
+
 <body>
-  <h1>Lista de Actividades</h1>
-  <a href="/activities/new">Crear Nueva Actividad</a>
-  <ul>
-    <% activities.forEach(activity => { %>
-      <li>
-        <strong><%= activity.name %></strong>: <%= activity.description %>
-        <br>
-        <a href="/activities/<%= activity.id %>/edit">Editar</a>
-        <form action="/activities/<%= activity.id %>?_method=DELETE" method="POST" style="display:inline;">
-          <button type="submit">Eliminar</button>
-        </form>
-      </li>
-    <% }); %>
-  </ul>
+  <div class="container">
+    <h1>Lista de Actividades</h1>
+    <a href="/activities/new" class="button">Crear Nueva Actividad</a>
+    <ul>
+      <% activities.forEach(activity=> { %>
+        <li>
+          <strong>
+            <%= activity.name %>
+          </strong>: <%= activity.description %>
+            <br>
+            <a href="/activities/<%= activity.id %>/edit" class="button">Editar</a>
+            <form action="/activities/<%= activity.id %>?_method=DELETE" method="POST" style="display:inline;">
+              <button type="submit" class="delete">Eliminar</button>
+            </form>
+        </li>
+        <% }); %>
+    </ul>
+  </div>
 </body>
+
 </html>

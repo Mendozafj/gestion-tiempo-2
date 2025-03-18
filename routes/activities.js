@@ -9,18 +9,21 @@ router.post('/', async (req, res) => {
     if (result.error) {
       return res.status(400).render('message', {
         message: 'Error',
+        messageType: 'error',
         details: result.error,
         redirectUrl: '/activities'
       });
     }
     res.status(201).render('message', {
       message: 'Actividad creada',
+      messageType: 'success',
       details: `La actividad "${req.body.name}" ha sido creada exitosamente.`,
       redirectUrl: '/activities'
     });
   } catch (error) {
     res.status(500).render('message', {
       message: 'Error',
+      messageType: 'error',
       details: `No se pudo crear la actividad: ${error.message}`,
       redirectUrl: '/activities'
     });
@@ -75,18 +78,21 @@ router.put('/:id', async (req, res) => {
     if (result.error) {
       return res.status(400).render('message', {
         message: 'Error',
+        messageType: 'error',
         details: result.error,
         redirectUrl: '/activities'
       });
     }
     res.status(200).render('message', {
       message: 'Actividad editada',
+      messageType: 'success',
       details: `La actividad "${req.body.name}" ha sido actualizada exitosamente.`,
       redirectUrl: '/activities'
     });
   } catch (error) {
     res.status(500).render('message', {
       message: 'Error',
+      messageType: 'error',
       details: `No se pudo editar la actividad: ${error.message}`,
       redirectUrl: '/activities'
     });
@@ -100,18 +106,21 @@ router.delete('/:id', async (req, res) => {
     if (result.error) {
       return res.status(400).render('message', {
         message: 'Error',
+        messageType: 'error',
         details: result.error,
         redirectUrl: '/activities'
       });
     }
     res.status(200).render('message', {
       message: 'Actividad eliminada',
+      messageType: 'success',
       details: `La actividad ha sido eliminada exitosamente.`,
       redirectUrl: '/activities'
     });
   } catch (error) {
     res.status(500).render('message', {
       message: 'Error',
+      messageType: 'error',
       details: `No se pudo eliminar la actividad: ${error.message}`,
       redirectUrl: '/activities'
     });

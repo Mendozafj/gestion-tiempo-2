@@ -1,45 +1,165 @@
+/* Estilos generales */
 body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
-}
-
-h1 {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
   color: #333;
+  line-height: 1.6;
 }
 
+/* Contenedor principal */
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Títulos */
+h1 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2.5em;
+}
+
+h2 {
+  color: #34495e;
+  margin-top: 20px;
+  font-size: 1.8em;
+}
+
+/* Formularios */
 form {
   margin-bottom: 20px;
 }
 
 label {
   display: block;
-  margin-top: 10px;
+  margin-top: 15px;
+  font-weight: bold;
+  color: #34495e;
 }
 
-input, textarea {
+input[type="text"],
+input[type="password"],
+textarea {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
   margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+  box-sizing: border-box;
 }
 
-button {
-  margin-top: 10px;
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Botones */
+button,
+a.button {
+  display: inline-block;
+  margin-top: 15px;
   padding: 10px 20px;
-  background-color: #28a745;
+  background-color: #3498db;
   color: white;
   border: none;
+  border-radius: 5px;
+  font-size: 1em;
   cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background-color: #218838;
+button:hover,
+a.button:hover {
+  background-color: #2980b9;
 }
 
+button.delete {
+  background-color: #e74c3c;
+}
+
+button.delete:hover {
+  background-color: #c0392b;
+}
+
+/* Enlaces */
 a {
-  color: #007bff;
+  color: #3498db;
   text-decoration: none;
 }
 
 a:hover {
   text-decoration: underline;
+}
+
+/* Listas */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul li {
+  background-color: #ecf0f1;
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+ul li strong {
+  color: #2c3e50;
+}
+
+/* Mensajes */
+.message {
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Botón de aceptar en mensajes */
+.message button {
+  margin-top: 10px;
+  background-color: #3498db;
+}
+
+.message button:hover {
+  background-color: #2980b9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
 }

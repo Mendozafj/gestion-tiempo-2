@@ -7,10 +7,12 @@
   <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 <body>
-  <h1><%= message %></h1>
-  <p><%= details %></p>
-  <a href="<%= redirectUrl %>">
-    <button>Aceptar</button>
-  </a>
+  <div class="container">
+    <div class="message <%= messageType %>">
+      <h1><%= message %></h1>
+      <p><%= details %></p>
+      <a href="<%= redirectUrl %>" class="button">Aceptar</a>
+    </div>
+  </div>
 </body>
 </html>

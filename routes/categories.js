@@ -7,11 +7,26 @@ router.post('/', async (req, res) => {
   try {
     const result = await categoriesController.register(req.body);
     if (result.error) {
-      return res.status(400).send(result.error);
+      return res.status(400).render('message', {
+        message: 'Error',
+        messageType: 'error',
+        details: result.error,
+        redirectUrl: '/categories'
+      });
     }
-    return res.status(201).send("Categoría creada");
+    res.status(201).render('message', {
+      message: 'Categoría creada',
+      messageType: 'success',
+      details: `La categoría "${req.body.name}" ha sido creada exitosamente.`,
+      redirectUrl: '/categories'
+    });
   } catch (error) {
-    res.status(500).send("Error al registrar la categoría");
+    res.status(500).render('message', {
+      message: 'Error',
+      messageType: 'error',
+      details: `No se pudo crear la categoría: ${error.message}`,
+      redirectUrl: '/categories'
+    });
   }
 });
 
@@ -19,9 +34,27 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const categories = await categoriesController.show();
-    res.status(200).render('categories', { categories });  // Renderiza la vista 'categories.ejs'
+    res.status(200).render('categories/categories', { categories });  // Renderiza la vista 'categories.ejs'
   } catch (err) {
     res.status(500).send(`Error al listar categorías: ${err}`);
+  }
+});
+
+// Mostrar formulario para crear una categoría
+router.get('/new', (req, res) => {
+  res.render('categories/new');
+});
+
+// Mostrar formulario para editar una categoría
+router.get('/:id/edit', async (req, res) => {
+  try {
+    const category = await categoriesController.showByID(req.params.id);
+    if (!category) {
+      return res.status(404).send("Categoría no encontrada");
+    }
+    res.render('categories/edit', { category });
+  } catch (err) {
+    res.status(500).send(`Error al obtener la categoría: ${err}`);
   }
 });
 
@@ -53,11 +86,26 @@ router.put('/:id', async (req, res) => {
   try {
     const result = await categoriesController.update(req.params.id, req.body);
     if (result.error) {
-      return res.status(400).send(result.error);
+      return res.status(400).render('message', {
+        message: 'Error',
+        messageType: 'error',
+        details: result.error,
+        redirectUrl: '/categories'
+      });
     }
-    res.status(200).send("Categoría editada");
-  } catch (err) {
-    res.status(500).send(`Error al editar la categoría: ${err}`);
+    res.status(200).render('message', {
+      message: 'Categoría editada',
+      messageType: 'success',
+      details: `La categoría "${req.body.name}" ha sido actualizada exitosamente.`,
+      redirectUrl: '/categories'
+    });
+  } catch (error) {
+    res.status(500).render('message', {
+      message: 'Error',
+      messageType: 'error',
+      details: `No se pudo editar la categoría: ${error.message}`,
+      redirectUrl: '/categories'
+    });
   }
 });
 
@@ -66,11 +114,26 @@ router.delete('/:id', async (req, res) => {
   try {
     const result = await categoriesController.delete(req.params.id);
     if (result.error) {
-      return res.status(400).send(result.error);
+      return res.status(400).render('message', {
+        message: 'Error',
+        messageType: 'error',
+        details: result.error,
+        redirectUrl: '/categories'
+      });
     }
-    res.status(200).send("Categoría eliminada")
-  } catch (err) {
-    res.status(500).send(`Error al eliminar categoría: ${err}`);
+    res.status(200).render('message', {
+      message: 'Categoría eliminada',
+      messageType: 'success',
+      details: `La categoría ha sido eliminada exitosamente.`,
+      redirectUrl: '/categories'
+    });
+  } catch (error) {
+    res.status(500).render('message', {
+      message: 'Error',
+      messageType: 'error',
+      details: `No se pudo eliminar la categoría: ${error.message}`,
+      redirectUrl: '/categories'
+    });
   }
 });
 
