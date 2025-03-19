@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-03-2025 a las 23:46:13
+-- Tiempo de generación: 19-03-2025 a las 18:16:21
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -90,13 +90,6 @@ CREATE TABLE `habits` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `habits`
---
-
-INSERT INTO `habits` (`id`, `name`, `description`, `created_at`) VALUES
-(1, 'hab1', 'habits1', '2025-03-16 21:00:02');
-
 -- --------------------------------------------------------
 
 --
@@ -121,13 +114,6 @@ CREATE TABLE `projects` (
   `description` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `projects`
---
-
-INSERT INTO `projects` (`id`, `name`, `description`, `created_at`) VALUES
-(1, 'pro1', 'project1', '2025-03-16 21:05:46');
 
 -- --------------------------------------------------------
 
@@ -295,7 +281,7 @@ ALTER TABLE `category_activities`
 -- AUTO_INCREMENT de la tabla `habits`
 --
 ALTER TABLE `habits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `habit_activities`
@@ -307,7 +293,7 @@ ALTER TABLE `habit_activities`
 -- AUTO_INCREMENT de la tabla `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `project_activity_logs`
