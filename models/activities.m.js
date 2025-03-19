@@ -134,7 +134,6 @@ class ActivitiesModel {
     }
   }
 
-
   // Obtener las actividades de una categoría determinada de un usuario dado
   async getActivitiesByUserAndCategory(userId, categoryId) {
     const query = `
